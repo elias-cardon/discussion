@@ -1,23 +1,58 @@
 <?php
 session_start();
-if ($_SESSION['login']) {
-	echo "<p>Bienvenue ".$_SESSION['login']. " ! <br/><br/>
+if (isset($_SESSION['login'])) {
+	$username = $_SESSION['login'];
+	if (isset($_POST['submit'])) {
+		$login = $_POST['login'];
+		$newlogin = $_POST['newlogin'];
+		$repeatnewlogin = $_POST['repeatnewlogin'];
+		if ($login && $newlogin && $repeatnewlogin) {
+			if ($newlogin == $repeatnewlogin) {
+				$db = mysqli_connect('localhost', 'root', '') or die('Erreur');
+				mysqli_select_db($db, 'discussion');
+				$query = mysqli_query($db, "SELECT * FROM utilisateurs WHERE login = '$username' AND login = '$login'");
+				$rows = mysqli_num_rows($query);
+				if ($rows==1) {
+					$newpass = mysqli_query($db, "UPDATE utilisateurs SET login='$newlogin' WHERE login='$username'");
+					die("Votre login a bien été modifié. Vous pouvez vous <a href='connexion.php'>connecter</a>.");
+				}
+				else
+				{
+					echo "Votre ancien login est incorrect";
+				}
+			}
+			else
+				{echo "Les deux champs doivent être identiques";}
+		
+		}
+		else
+		{
+			echo "Veuillez saisir tous les champs";
+		}
+	}
 
-	<a href='changement_mdp.php'>Changer de mot de passe</a><br/>
 
-	<a href='changement_login.php'>Changer de login</a><br/>
-	<a href='commentaire.php'>Commentaire</a><br/>
-	<a href='logout.php'>Se déconnecter</a></p>";
+echo '<form method="POST" action="changement_login.php">
+<p>Votre ancien login</p>
+<input class="input" type="text" name="login"<br/>
+<p>Votre nouveau login</p>
+<input class="input" type="text" name="newlogin">
+<p>Répétez votre nouveau login</p>
+<input class="input" type="text" name="repeatnewlogin"><br/><br/>
+<input class="input" type="submit" value="Changer de login" name="submit"</input>
+</form>
+	';
 }
 else
 {
 	header("Location:connexion.php");
 }
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Profil</title>
+	<title>Changement de login</title>
 	<link rel="icon" type="image/png" href="images/avatar.png">
 </head>
 <body>
@@ -29,7 +64,8 @@ else
 					<i>"The vision and technology of the near future"</i>
 				</div>
 				<ul id="lien">
-					<li><a href="index.php">Accueil</a></li>
+					<li><a href="inscription.php">Inscription</a></li>
+					<li><a href="connexion.php">Connexion</a></li>
 					<li><a href="livre-or.php">Livre d'or</a></li>
 				</ul>
 			</header>
@@ -71,21 +107,29 @@ p
 	font-size: 16pt;
 	font-weight: 400;
 	line-height: 1.75em;
-	border : 4mm ridge rgba(170, 50, 220, .6);
 	color : black;
 }
 
-a
+body
 {
-	text-decoration : none;
-	color : brown;
+	background-color : cadetblue;
+}
+
+.input
+{
+	display:block;
+	margin:auto;
 }
 
 
+form
+{
+	border : 4mm ridge rgba(170, 50, 220, .6);
+}
 </style>';
 ?>
 
- <!-- CSS -->
+<!-- CSS -->
             <style>
 
 @import url("fontawesome-all.min.css");
