@@ -65,7 +65,6 @@ if (isset($_SESSION["loginConnect"])) {
         <link rel="stylesheet" href="src/css/index.css">
         <link rel="stylesheet" href="src/css/main.css">
         <link rel="stylesheet" href="src/css/connexion.css">
-        <!-- <link rel="stylesheet" href="src/css/style1.css"> -->
 
         <title>Connexion</title>
         <script src="https://kit.fontawesome.com/22c6f4e36c.js" crossorigin="anonymous"></script>

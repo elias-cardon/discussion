@@ -1389,7 +1389,7 @@ button {
     display: inline-block;
     margin-top: 2em;
     padding: 1em 2em 1em 2em;
-    background: #40493C;
+    background-color: rgb(045, 146, 022);
     border-radius: 7px;
     border: 1px solid #373F34;
     letter-spacing: 0.20em;
