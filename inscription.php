@@ -1,123 +1,109 @@
 <?php
 session_start();
-if(isset($_POST['submit']))
-{
-	$login = htmlentities(trim($_POST['login']));
-	$prenom = htmlentities(trim($_POST['prenom']));
-	$nom = htmlentities(trim($_POST['nom']));
-	$password = htmlentities(trim($_POST['password']));
-	$repeatpassword = htmlentities(trim($_POST['repeatpassword']));
-
-	if($login && $prenom && $nom && $password && $repeatpassword)
-	{
-		if($password == $repeatpassword)
-		{
-			$db = mysqli_connect('localhost', 'root', '') or die('Erreur');
-			mysqli_select_db($db, 'discussion');
-
-			$query = mysqli_query($db, "INSERT INTO utilisateurs (login, prenom, nom, password) VALUES('$login', '$prenom', '$nom', '$password');");
-
-			die("Inscription terminée. <a href='connexion.php'>Connectez-vous</a>.");
-		}
-		else
-		{
-			echo "Les mots de passes doivent être identiques";
-		}
-	}
-	else
-	{
-		echo "Veuillez saisir tous les champs";
-	}
+if (isset($_POST['submitLogout'])) {
+    session_destroy();
+    $_SESSION = array();
+    header('Location: connexion.php');
 }
+
+if (isset($_SESSION["loginConnect"])) {
+    echo "Tu es connecté en tant que " . "\"" . $_SESSION['loginConnect'] . "\"." . " Retour <a href=\"profil.php?id=" . $_SESSION['id'] . "\">Profil</a>";
+} else {
+    $link = mysqli_connect("localhost", "root", "", "discussion");
+
+    if (isset($_POST['submit'])) {
+
+        $pass = $_POST['password'];
+        $pass1 = $_POST['password1'];
+        $login = $_POST['login'];
+        $requete = "SELECT * FROM utilisateurs where login ='$login' and password ='$pass'";
+        $query = mysqli_query($link, $requete);
+
+        $data = mysqli_fetch_all($query);
+        $count = mysqli_num_rows($query);
+
+        $sql_l = "SELECT * FROM utilisateurs WHERE login = '$login'";
+        $sql_p = "SELECT * FROM utilisateurs WHERE password = '$pass'";
+
+        $res_l = mysqli_query($link, $sql_l);
+        $res_p = mysqli_query($link, $sql_p);
+        $message = '';
+
+        if (mysqli_num_rows($res_l) == 1) {
+            $messageLogin = 'Votre login exist deja !';
+        } elseif ($pass != $pass1) {
+            $messagePass = 'Vos mot de passe ne correspondent pas !';
+        } elseif ($pass == $pass1 and mysqli_num_rows($res_l) == 0) {
+            $insertMbr = "INSERT INTO utilisateurs (login, password) VALUES ('$login', '$pass')";
+            $query = mysqli_query($link, $insertMbr);
+            header('Location: connexion.php');
+        }
+    }
+
 ?>
+    <!DOCTYPE html>
+    <html lang="fr">
 
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="src/css/index.css">
+        <link rel="stylesheet" href="src/css/main.css">
 
+        <title>Register</title>
+        <script src="https://kit.fontawesome.com/22c6f4e36c.js" crossorigin="anonymous"></script>
+    </head>
 
+    <body>
+        <header>
+            <nav>
+            <h1><a href="#">Masque</a></h1>
+                <ul>
+                    <li><a href="index.php">Home</a></li>
+                    <li><a href="connexion.php">Connexion</a></li>
+                    <li><a href="motdepass.html">Forget password ?</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <section>
+                <h2>Register</h2>
+                <div class="container">
+                    <form action="<?php echo htmlspecialchars($_SERVER['REQUEST_URI'], ENT_QUOTES); ?>" method="post" method="POST">
+                        <div class="imgcontainer">
+                            <i class="fas fa-user-circle avatar" alt="Avatar"></i>
+                        </div>
+                        <div class="block">
+                            <?php if (!empty($messageLogin)) : ?>
+                                <p><?php echo $messageLogin; ?></p>
+                            <?php endif; ?>
+                            <label for="uname"><b>Login*</b></label>
+                            <input type="text" placeholder="Enter lgoin" name="login" value="<?php if (!empty($_POST['login'])) {
+                                                                                                    echo htmlspecialchars($_POST['login'], ENT_QUOTES);
+                                                                                                } ?>" required>
 
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Inscription</title>
-<meta name="keywords" content="" />
-<meta name="description" content="" />
-<link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900" rel="stylesheet" />
-<link href="style.css" rel="stylesheet" type="text/css" media="all" />
-<link href="fontawesome-templategit.css" rel="stylesheet" type="text/css" media="all" />
-	</head>
-	<body class="color">
-		<!-- Header -->
-		<div id="header-wrapper">
-			<div id="header" class="container">
-				<div id="logo">
-					<h1><a href="#">Masque</a></h1>
-				</div>
-				<div id="menu">
-					<ul>
-						<li><a href="index.php" accesskey="1" title="">Page d'accueil</a></li>
-						<!-- <li><a href="inscription.php" accesskey="2" title="">Inscription</a></li> -->
-						<li><a href="connexion.php" accesskey="3" title="">Connexion</a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
-		<!-- Main -->
-		<main>
-			<h1>Inscription</h1><br/>
-				<form method="post" action="inscription.php">
-        			<p>Login</p>
-        			<input class="input" type="text" name="login">
-        			<p>Mot de passe</p>
-        			<input class="input" type="password" name="password">
-        			<input class="input" type="submit" name="submit" value="Valider">
-				</form>
-		</main>
-		<!-- Footer -->
-<!-- 			<footer id="footer">
-				<div class="inner">
-					<ul class="icons">
-						<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
-						<li><a href="#" class="icon brands fa-github"><span class="label">Github</span></a></li>
-						<li><a href="#" class="icon brands fa-dribbble"><span class="label">Dribbble</span></a></li>
-						<li><a href="#" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
-					</ul>
-				</div>
-			</footer> -->
+                            <label for="psw"><b>Password*</b></label>
+                            <input type="password" placeholder="Enter Password" name="password" required>
 
-		<!-- Scripts -->
-<!-- 			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/jquery.poptrox.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script> -->
-	</body> 
-</html>
+                            <?php if (!empty($messagePass)) : ?>
+                                <p><?php echo $messagePass; ?></p>
+                            <?php endif; ?>
+                            <label for="psw"><b>Comfirm Password*</b></label>
+                            <input type="password" placeholder="Enter comfirm Password" name="password1" required>
+
+                            <button type="submit" name="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </main>
+        <footer>
+
+        </footer>
+    </body>
+
+    </html>
 
 <?php
-echo '<style>
-h1
-{
-	text-align : center;
-	text-decoration : underline;
 }
-
-p
-{
-	text-align : center;
-	color : white;
-}
-
-.input
-{
-	display:block;
-	margin:auto;
-}
-
-body
-{
-	background-image: linear-gradient(#03224c, #77b5fe);
-	background-repeat : no-repeat;
-}
-</style>';
 ?>

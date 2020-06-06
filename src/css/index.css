@@ -2,7 +2,6 @@
 
 html, body {
     margin: 0; padding: 0;
-    font-family: 'Lato', sans-serif;
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -31,6 +30,13 @@ section div {
 .container h2 {
     font-size: 3rem;
 }
+.container-index form {
+    width: 400px;
+    margin: auto;
+
+}
+
+/* NAV */
 
 /* FORM */
 section form {

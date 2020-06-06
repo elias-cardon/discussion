@@ -1,41 +1,32 @@
 <?php
 session_start();
 $link = mysqli_connect("localhost", "root", "", "discussion");
-if (isset($_SESSION['login'])) {
+if (isset($_SESSION['id'])) {
     $date = '%d/%m/%Y';
     $requete = "SELECT messages.*, utilisateurs.*, DATE_FORMAT(date, '$date') as new_date
                         FROM messages 
                         INNER JOIN utilisateurs ON messages.id_utilisateur = utilisateurs.id
                         ORDER BY messages.id";
+
     $query = mysqli_query($link, $requete);
     $data = mysqli_fetch_all($query);
-   
-
     if (isset($_POST['submitLogout'])) {
         session_destroy();
         $_SESSION = array();
         header('Location: connexion.php');
     }
 
-    if (isset($_POST['submitDiscussion'])) {
-        $requeteid = "SELECT * FROM utilisateurs";
-        $queryid = mysqli_query($link, $requeteid);
-        $dataid = mysqli_fetch_all($queryid);
+    if (isset($_POST['submit'])) {
         $msg = $_POST['msg'];
-        $id = $dataid[0][0];
+        $id = $_SESSION['id'];
         $msglength = strlen($msg);
-        echo"test";
         if (!empty($_POST['msg']) and ($msglength <= 140)) {
-
             $date = date('Y-m-d');
             $insertMsg = "INSERT INTO messages (message, id_utilisateur, date) VALUES ('$msg', '$id','$date')";
             $insertMsg = mysqli_query($link, $insertMsg);
             header("Location: discussion.php");
-            echo"test";
-            
         } else {
             $message = 'Votre message est trop long 140 max !';
-        
         }
     }
     if (isset($_SESSION["loginConnect"])) {
@@ -43,73 +34,38 @@ if (isset($_SESSION['login'])) {
 ?>
     <!DOCTYPE html>
     <html lang="fr">
-    <style>
-        thead {
-            color: green;
-        }
-
-        tbody {
-            color: blue;
-        }
-
-        tfoot {
-            color: red;
-        }
-
-        table,
-        th,
-        td {
-            border: 1px solid black;
-        }
-
-        td,
-        th {
-            padding: 0.5rem;
-        }
-    </style>
-
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="kalcss/index.css">
-        <link rel="stylesheet" href="kalcss/main1.css">
-        <link rel="stylesheet" href="kalcss/discussion1.css">
-        <link rel="stylesheet" href="style.css">
-
+        <link rel="stylesheet" href="src/css/main.css">
+        <link rel="stylesheet" href="src/css/discussion.css">
 
         <title>Discussion</title>
         <script src="https://kit.fontawesome.com/22c6f4e36c.js" crossorigin="anonymous"></script>
     </head>
 
     <body>
-            <header>
-            <div id='header-wrapper'>
-        <div id='header' class='container'>
-            <div id='logo'>
-                <h1><a href='index.php'>Masque</a></h1>
-            </div>
-            <div id='menu'>
+        <header>
+            <nav>
+            <h1><a href="#">Masque</a></h1>
                 <ul>
-                    <li><a href='index.php' title=''>Page d'accueil</a></li>
-                    <li><a href='discussion.php'> Discussion</a></li>
-
-
+                    <li><a href="index.php">Home</a></li>
+                    <li><a href="discussion.php">Discussion</a></li>
+                    <li><a href="profil.php">Profil</a></li>
                     <?php
-                    if (isset($_SESSION['login'])) {
+                    if (isset($_SESSION['id'])) {
                     ?>
                         <li>
+
                             <form action="<?php echo htmlspecialchars($_SERVER['REQUEST_URI'], ENT_QUOTES); ?>" method="POST">
                                 <button name="submitLogout" type="submit">Deconnexion</button>
                             </form>
                         </li>
                     <?php
                     }
-
                     ?>
                 </ul>
-            </div>
-        </div>
-    </div>
+            </nav>
         </header>
         <main>
             <section>
@@ -139,11 +95,12 @@ if (isset($_SESSION['login'])) {
                     <form action="<?php echo htmlspecialchars($_SERVER['REQUEST_URI'], ENT_QUOTES); ?>" method="post" method="POST">
                         <div class="block">
 
+                            <label for="ucom"><b>Commentaire*</b></label> <br> <br>
                             <textarea cols="30" rows="10" placeholder="Entrer votre message" name="msg" value="" required></textarea>
                             <?php if (!empty($message)) : ?>
                                 <p><?php echo $message; ?></p>
                             <?php endif; ?>
-                            <button type="submit" name="submitDiscussion">Nouveau message</button>
+                            <button type="submit" name="submit">Nouveau message</button>
                         </div>
                     </form>
                 </div>

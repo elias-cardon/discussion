@@ -1,69 +1,109 @@
 <?php
 session_start();
-if ($_SESSION['login']) {
-	echo "
-	<html>
-<head>
-<title>Profil</title>
-<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
-<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900' rel='stylesheet' />
-<link href='style.css' rel='stylesheet' type='text/css' media='all' />
-<link href='fontawesome-templategit.css' rel='stylesheet' type='text/css' media='all' />
-</head>
-<body>
-<div id='header-wrapper'>
-	<div id='header' class='container'>
-		<div id='logo'>
-			<h1><a href='index.php'>Masque</a></h1>
-		</div>
-		<div id='menu'>
-			<ul>
-				<li><a href='#' accesskey='1' title=''>Page d'accueil</a></li>
-				<li><a href='logout.php'>Se déconnecter</a></p></li>
-				<li><a href='discussion.php'> Discussion</a></li>
 
+$link = mysqli_connect("localhost", "root", "", "discussion");
 
-			</ul>
-		</div>
-	</div>
-</div>
-</body>
-</html>
-	<p>Bienvenue ".$_SESSION['login']. " ! <br/><br/>
-
-	<a href='changement_mdp.php'>Changer de mot de passe</a><br/>
-
-	<a href='changement_login.php'>Changer de login</a><br/>";
-	
+if (isset($_POST['submitLogout'])) {
+    session_destroy();
+    $_SESSION = array();
+    header('Location: connexion.php');
 }
-else
-{
-	header("Location:connexion.php");
-}
+
+if (isset($_SESSION['id'])) {
+    $id = $_SESSION['id'];
+    $message = '';
+    $requete = "SELECT * FROM utilisateurs WHERE id = $id";
+    $query = mysqli_query($link, $requete);
+    $userinfo = mysqli_fetch_all($query);
+
+    if (isset($_POST['editlogin']) and !empty($_POST['editlogin']) and $_POST['editlogin'] != $userinfo[0][1]) {
+        $editlogin = htmlspecialchars($_POST['editlogin']);
+        $insertLogin = "UPDATE utilisateurs SET login = '$editlogin' WHERE id = '$id'";
+        $requete = mysqli_query($link, $insertLogin);
+        header("Location: profil.php?id=" . $_SESSION['id']);
+    }
+
+    if (isset($_POST['editpassword1']) and !empty($_POST['editpassword1']) and isset($_POST['editpassword2']) and !empty($_POST['editpassword2'])) {
+
+        $pass1 = $_POST['editpassword1'];
+        $pass2 = $_POST['editpassword2'];
+        if ($pass1 == $pass2) {
+            $insertPass = "UPDATE utilisateurs SET password = '$pass1' WHERE id = '$id'";
+            $requete = mysqli_query($link, $insertPass);
+            header("Location: profil.php?id=" . $_SESSION['id']);
+        } else {
+            $messagePass = 'Vos mot de passe ne correspondent pas !';
+        }
+    }
 ?>
+    <!DOCTYPE html>
+    <html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="src/css/main.css">
+        <link rel="stylesheet" href="src/css/profil.css">
+        <title>Profil</title>
+        <script src="https://kit.fontawesome.com/22c6f4e36c.js" crossorigin="anonymous"></script>
+    </head>
+
+    <body>
+        <header>
+            <nav>
+            <h1><a href="#">Masque</a></h1>
+                <ul>
+                    <li><a href="index.php">Home</a></li>
+                    <li><a href="discussion.php">Discussion</a></li>
+                    <li><a href="profil.php">Profil</a></li>
+                    <?php
+                    if (isset($_SESSION['id'])) {
+                    ?>
+                        <li>
+
+                            <form action="<?php echo htmlspecialchars($_SERVER['REQUEST_URI'], ENT_QUOTES); ?>" method="POST">
+                                <button name="submitLogout" type="submit">Deconnexion</button>
+                            </form>
+                        </li>
+                    <?php
+                    }
+                    ?>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <section>
+                <div class="container">
+                    <h2>Bievennue <?php
+                                    echo $userinfo[0][1]
+                                    ?></h2>
+
+                    <form action="<?php echo htmlspecialchars($_SERVER['REQUEST_URI'], ENT_QUOTES); ?>" method="post" method="POST">
+
+                        <label>Login : <?php echo $userinfo[0][1]; ?></label>
+                        <input type="text" placeholder="Enter your lgoin" name="editlogin" value="<?php echo $userinfo[0][1]; ?>">
+
+                        <label>Password : <?php echo $userinfo[0][2]; ?></label>
+                        <input type="password" placeholder="Enter Password" name="editpassword1">
+
+                        <label>Password : <?php echo $userinfo[0][2]; ?></label>
+                        <input type="password" placeholder="Enter confirm Password" name="editpassword2">
+                        <?php if (!empty($messagePass)) {  ?>
+                            <p><?php echo $messagePass; ?></p>
+                        <?php } ?>
+                        <button name="submitedit" type="submit">Edit</button>
+
+                    </form>
+                </div>
+            </section>
 
 
+        </main>
+        <footer>
+
+        </footer>
+    </body>
 <?php
-echo '<style>
-p
-{
-	text-align : center;
-	font-family: "Source Sans Pro", Helvetica, sans-serif;
-	font-size: 16pt;
-	font-weight: 400;
-	line-height: 1.75em;
-	color : white;
+} else {
+    header("Location: connexion.php");
 }
-
-.input
-{
-	display:block;
-	margin:auto;
-}
-
-body
-{
-	background-image: linear-gradient(#03224c, #77b5fe);
-}
-</style>';
 ?>

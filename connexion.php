@@ -1,103 +1,135 @@
 <?php
 session_start();
-if (isset($_POST['submit'])) {
-	$login = $_POST['login'];
-	$password = $_POST['password'];
-	if ($login && $password) {
-		$db = mysqli_connect('localhost', 'root', '');
-		mysqli_select_db($db, 'discussion');
+if (isset($_SESSION["loginConnect"])) {
+    echo "Tu es connecté en tant que " . "\"" . $_SESSION['loginConnect'] . "\"." . " Retour <a href=\"profil.php?id=" . $_SESSION['id'] . "\">Profil</a>";
+} else {
+    $link = mysqli_connect("localhost", "root", "", "discussion");
 
-		$query = mysqli_query($db, "SELECT * FROM utilisateurs WHERE login='$login' && password='$password'");
-		$rows = mysqli_num_rows($query);
-		if ($rows==1) {
-			$_SESSION['login'] = $login;
-			header('Location:profil.php');
-		}
+    $requete = "SELECT * FROM utilisateurs";
+    $query = mysqli_query($link, $requete);
+    $userinfo = mysqli_fetch_all($query);
 
-		if ($login == 'admin'|| $login == 'admin' && $password == 'admin') { 
-			header('Location:admin.php');
-		}
-		
-		else
-		{
-			echo "Login ou password incorrect";
-		}
-	}
+    if (isset($_POST['submitConnect'])) {
+        $login = htmlspecialchars($_POST['loginConnect']);
+        $pass = htmlspecialchars($_POST['passwordConnect']);
 
-	else
-	{
-		echo "Veuillez saisir tous les champs.";
-	}
-}
+        $requete = "SELECT * FROM utilisateurs where login ='$login' and password ='$pass'";
+        $query = mysqli_query($link, $requete);
+        $count = mysqli_num_rows($query);
+
+        $sql_l = "SELECT * FROM utilisateurs WHERE login='$login'";
+        $sql_p = "SELECT * FROM utilisateurs WHERE password='$pass'";
+        $res_l = mysqli_query($link, $sql_l);
+        $res_p = mysqli_query($link, $sql_p);
+        $message = '';
+
+        // Le login est-il rempli ?
+        if (empty($login)) {
+            $message = 'Veuillez indiquer votre login svp !';
+        }
+        // Le mot de passe est-il rempli ?
+        elseif (empty($pass)) {
+            $message = 'Veuillez indiquer votre mot de passe svp !';
+        }
+        // Le login est-il correct ?
+        elseif (mysqli_num_rows($res_l) == 0) {
+            $message = 'Votre login n\'exist pas !';
+        }
+        // Le mot de passe est-il correct ?
+        else {
+            $message = 'Votre mot de passe est faux !';
+        }
+
+        if ($login == 'admin' || $login == 'Admin' && $pass == 'admin') {
+            $_SESSION['id'] = $userinfo[0][0];
+            $_SESSION['loginConnect'] = $userinfo[0][1];
+            header('Location: admin.php');
+        }
+        // L'identification a réussi
+        if ($count == 1 and $login != 'admin') {
+            $requete = "SELECT * FROM utilisateurs where login ='$login' and password ='$pass'";
+            $userinfo = mysqli_fetch_all($query);
+            $_SESSION['id'] = $userinfo[0][0];
+            $_SESSION['loginConnect'] = $userinfo[0][1];
+            header("Location: profil.php?id=" . $_SESSION['id']);
+        }
+    }
+
 ?>
+    <!DOCTYPE html>
+    <html lang="fr">
 
-<!DOCTYPE html>
-<html>
-	<head>
-		<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Connexion</title>
-<meta name="keywords" content="" />
-<meta name="description" content="" />
-<link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900" rel="stylesheet" />
-<link href="style.css" rel="stylesheet" type="text/css" media="all" />
-<link href="fontawesome-templategit.css" rel="stylesheet" type="text/css" media="all" />
-	</head>
-	<body class="color">
-		<!-- Header -->
-			<div id="header-wrapper">
-				<div id="header" class="container">
-					<div id="logo">
-						<h1><a href="#">Masque</a></h1>
-					</div>
-					<div id="menu">
-						<ul>
-							<li><a href="index.php" accesskey="1" title="">Page d'accueil</a></li>
-							<li><a href="inscription.php" accesskey="2" title="">Inscription</a></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		<!-- Main -->
-		<main>
-			<h1 id="connexion">Connexion</h1>
-				<form method="post" action="connexion.php">
-        			<p>Login</p>
-        			<input class="input" type="text" name="login">
-        			<p>Mot de passe</p>
-        			<input class="input" type="password" name="password"><br/><br/>
-        			<input class="input" type="submit" name="submit" value="Valider"><br/>
-				</form>
-		</main>
-	</body> 
-</html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="src/css/index.css">
+        <link rel="stylesheet" href="src/css/main.css">
+        <link rel="stylesheet" href="src/css/connexion.css">
+        <!-- <link rel="stylesheet" href="src/css/style1.css"> -->
+
+        <title>Connexion</title>
+        <script src="https://kit.fontawesome.com/22c6f4e36c.js" crossorigin="anonymous"></script>
+    </head>
+
+    <body>
+        <header>
+            <nav>
+                <h1><a href="#">Masque</a></h1>
+                <ul>
+                    <li><a href="index.php">Home</a></li>
+                    <li><a href="discussion.php">Discussion</a></li>
+                    <li><a href="inscription.php">Inscription</a></li>
+                    <?php
+                    if (isset($_SESSION['id'])) {
+                    ?>
+                        <li>
+
+                            <form action="<?php echo htmlspecialchars($_SERVER['REQUEST_URI'], ENT_QUOTES); ?>" method="POST">
+                                <button name="submitLogout" type="submit">Deconnexion</button>
+                            </form>
+                        </li>
+                    <?php
+                    }
+                    ?>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <section>
+                <div class="container">
+                    <h2>Connexion</h2>
+                    <div class="test">
+                        <form action="<?php echo htmlspecialchars($_SERVER['REQUEST_URI'], ENT_QUOTES); ?>" method="POST">
+                            <div class="imgcontainer">
+                                <i class="fas fa-user-circle avatar" alt="Avatar"></i>
+                            </div>
+                            <div class="block">
+                                <?php if (!empty($message)) : ?>
+                                    <p><?php echo $message; ?></p>
+                                <?php endif; ?>
+                                <label for="login"><b>Login*</b></label>
+                                <input type="text" placeholder="Enter login" name="loginConnect" id="login" value="<?php if (!empty($_POST['login'])) {
+                                                                                                                        echo htmlspecialchars($_POST['login'], ENT_QUOTES);
+                                                                                                                    } ?>" required />
+                                <label for="psw"><b>Password*</b></label>
+                                <input type="password" placeholder="Enter Password" name="passwordConnect" id="psw" required>
+
+                                <button name="submitConnect" type="submit">Connexion</button>
+                                <span class="psw">Already don't have an account ? <a href="inscription.php"> Sign in ?</a></span>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </section>
+
+
+        </main>
+        <footer>
+
+        </footer>
+    </body>
 
 <?php
-echo '<style>
-#connexion
-{
-	text-align : center;
-	font-family: "Source Sans Pro", Helvetica, sans-serif;
-	text-decoration : underline;
 }
-p
-{
-	text-align : center;
-	font-family: "Source Sans Pro", Helvetica, sans-serif;
-	font-size: 16pt;
-	font-weight: 400;
-	line-height: 1.75em;
-}
-
-.input
-{
-	display:block;
-	margin:auto;
-}
-
-body
-{
-	background-image: linear-gradient(#03224c, #77b5fe);
-}
-</style>';
 ?>

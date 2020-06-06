@@ -48,7 +48,7 @@ h4,
 h5,
 h6 {
     font-weight: 600;
-    color: rgb(255, 255, 255);
+    color: black;
 }
 
 h1 {
@@ -1313,15 +1313,91 @@ footer {
 }
 
 
+/* NAVIGATION */
+nav h1, h2, h3
+{
+    margin: 0;
+    padding: 0;
+}
+
+nav h1 a {
+    color: white;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 300;
+}
+nav ul {
+    align-items: center;
+    list-style: none;
+    margin: 0.5rem 0;
+    width: 100%;
+}
+nav ul li {
+    justify-content: end;
+    margin: 0 2rem;
+
+}
+nav ul li a {
+    text-decoration: none;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 300;
+}
+nav ul li a:hover {
+    color: gray;
+}
+section h2 {
+    margin-left: 14px;
+    font-size: 3rem;
+}
+section {
+    display: flex;
+    justify-content: center;
+}
+
+header
+{
+    background: url(../images/test.jpg) no-repeat center;
+    display: flex;
+	background-size: cover;
+
+}
+header nav h1 a
+{
+    font-size: 4rem;
+}
+header
+{
+    align-items: center;
+}
+nav
+{
+    align-items: center;
+    padding: 5em 0em;
+}
 
 /* BUTTON */
-button {
-    background-color: red;
+nav button {
+    background-color: rgb(045, 146, 022);
     color: white;
     padding: 14px 20px;
+    margin: 8px 0;
     border: none;
     cursor: pointer;
     width: 100%;
+}
+button {
+    display: inline-block;
+    margin-top: 2em;
+    padding: 1em 2em 1em 2em;
+    background: #40493C;
+    border-radius: 7px;
+    border: 1px solid #373F34;
+    letter-spacing: 0.20em;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: 400;
+    font-size: 0.90em;
+    color: #FFF;
 }
 button:hover {
     opacity: 0.8;

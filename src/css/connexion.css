@@ -1,0 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap');
+form span {
+    display: flex;
+    justify-content: end;
+    font-size: 1.5rem;
+}
+
+form span a {
+    padding: 0 1rem;
+    font-size: 1.5rem;
+
+}
+form span a:hover {
+    color: gray;
+}
+span.psw{
+    float: right;
+    padding-top: 2rem;
+}
+form {
+    padding-bottom: 4rem;
+}
+h1 {
+    margin: 0;
+}
