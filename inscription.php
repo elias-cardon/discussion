@@ -50,7 +50,7 @@ if (isset($_SESSION["loginConnect"])) {
         <link rel="stylesheet" href="src/css/index.css">
         <link rel="stylesheet" href="src/css/main.css">
 
-        <title>Register</title>
+        <title>Inscription</title>
         <script src="https://kit.fontawesome.com/22c6f4e36c.js" crossorigin="anonymous"></script>
     </head>
 
@@ -70,9 +70,6 @@ if (isset($_SESSION["loginConnect"])) {
                 <h2>Inscription</h2>
                 <div class="container">
                     <form action="<?php echo htmlspecialchars($_SERVER['REQUEST_URI'], ENT_QUOTES); ?>" method="post" method="POST">
-                        <div class="imgcontainer">
-                            <i class="fas fa-user-circle avatar" alt="Avatar"></i>
-                        </div>
                         <div class="block">
                             <?php if (!empty($messageLogin)) : ?>
                                 <p><?php echo $messageLogin; ?></p>

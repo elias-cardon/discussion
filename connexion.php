@@ -78,7 +78,6 @@ if (isset($_SESSION["loginConnect"])) {
                     <li><a href="index.php">Accueil</a></li>
                     <li><a href="discussion.php">Discussion</a></li>
                     <li><a href="inscription.php">Inscription</a></li>
-                    <li><a href="motdepass.html">Mot de passe oublié ?</a></li>
                     <?php
                     if (isset($_SESSION['id'])) {
                     ?>
@@ -100,9 +99,6 @@ if (isset($_SESSION["loginConnect"])) {
                     <h2>Connexion</h2>
                     <div class="test">
                         <form action="<?php echo htmlspecialchars($_SERVER['REQUEST_URI'], ENT_QUOTES); ?>" method="POST">
-                            <div class="imgcontainer">
-                                <i class="fas fa-user-circle avatar" alt="Avatar"></i>
-                            </div>
                             <div class="block">
                                 <?php if (!empty($message)) : ?>
                                     <p><?php echo $message; ?></p>

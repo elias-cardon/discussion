@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="src/css/index.css">
     <link rel="stylesheet" href="src/css/main.css">
     <link rel="stylesheet" href="src/css/style.css">
-    <title>Connexion</title>
+    <title>Accueil</title>
     <script src="https://kit.fontawesome.com/22c6f4e36c.js" crossorigin="anonymous"></script>
 </head>
 
@@ -69,16 +69,12 @@
     <footer>
 			<section>
             	<div class="container container-index">
-                	<form action="inscription.php" method="POST">
-						<div class="block">
-                        	<button type="submit">Inscription</button>
-                    	</div>
-                	</form>
-                	<form action="connexion.php" method="POST">
-                    	<div class="block">
-                        	<button name="submit" type="submit">connexion</button>
-                    	</div>
-                	</form>
+                	<div class="block">
+                        <button type="submit">Inscription</button>
+                    </div>
+					<div class="block">
+                        <button name="submit" type="submit">Connexion</button>
+                    </div>
             	</div>
         	</section>
     </footer>

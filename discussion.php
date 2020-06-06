@@ -76,7 +76,7 @@ if (isset($_SESSION['id'])) {
                     ?>
                         <div class="block-msg">
                             <div>
-                                <p class="user">Utilisateur :<b class="username"><?php echo $com[5]; ?> </b></p>
+                                <p class="user">Utilisateur : <b class="username"><?php echo $com[5]; ?> </b></p>
                                 <p class="date">Date : <?php echo $com[7]; ?></p>
                             </div>
                             <div>
