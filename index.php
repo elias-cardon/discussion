@@ -19,7 +19,7 @@
         <nav>
             <h1><a href="#">Masque</a></h1>
             <ul>
-                <li><a href="index.php">Home</a></li>
+                <!-- <li><a href="index.php">Home</a></li> -->
                 <li><a href="inscription.php">Inscription</a></li>
                 <li><a href="connexion.php">Connexion</a></li>
                 <li><a href="discussion.php">Discussion</a></li>
@@ -65,26 +65,22 @@
                 </div>
             </div>
         </section>
-        <section>
-            <div class="container container-index">
-                <form action="inscription.php" method="POST">
-                    <div class="imgcontainer">
-                        <i class="fas fa-user-circle avatar" alt="Avatar"></i>
-                    </div>
-                    <div class="block">
-                        <button type="submit">Inscription</button>
-                    </div>
-                </form>
-                <form action="connexion.php" method="POST">
-                    <div class="block">
-                        <button name="submit" type="submit">connexion</button>
-                    </div>
-                </form>
-            </div>
-        </section>
     </main>
     <footer>
-
+			<section>
+            	<div class="container container-index">
+                	<form action="inscription.php" method="POST">
+						<div class="block">
+                        	<button type="submit">Inscription</button>
+                    	</div>
+                	</form>
+                	<form action="connexion.php" method="POST">
+                    	<div class="block">
+                        	<button name="submit" type="submit">connexion</button>
+                    	</div>
+                	</form>
+            	</div>
+        	</section>
     </footer>
 </body>
 

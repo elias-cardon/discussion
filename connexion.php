@@ -33,11 +33,11 @@ if (isset($_SESSION["loginConnect"])) {
         }
         // Le login est-il correct ?
         elseif (mysqli_num_rows($res_l) == 0) {
-            $message = 'Votre login n\'exist pas !';
+            $message = 'Votre login n\'existe pas !';
         }
         // Le mot de passe est-il correct ?
         else {
-            $message = 'Votre mot de passe est faux !';
+            $message = 'Votre mot de passe est incorrect !';
         }
 
         if ($login == 'admin' || $login == 'Admin' && $pass == 'admin') {
@@ -75,9 +75,10 @@ if (isset($_SESSION["loginConnect"])) {
             <nav>
                 <h1><a href="#">Masque</a></h1>
                 <ul>
-                    <li><a href="index.php">Home</a></li>
+                    <li><a href="index.php">Accueil</a></li>
                     <li><a href="discussion.php">Discussion</a></li>
                     <li><a href="inscription.php">Inscription</a></li>
+                    <li><a href="motdepass.html">Mot de passe oublié ?</a></li>
                     <?php
                     if (isset($_SESSION['id'])) {
                     ?>
@@ -107,14 +108,14 @@ if (isset($_SESSION["loginConnect"])) {
                                     <p><?php echo $message; ?></p>
                                 <?php endif; ?>
                                 <label for="login"><b>Login*</b></label>
-                                <input type="text" placeholder="Enter login" name="loginConnect" id="login" value="<?php if (!empty($_POST['login'])) {
+                                <input type="text" placeholder="Entrer login" name="loginConnect" id="login" value="<?php if (!empty($_POST['login'])) {
                                                                                                                         echo htmlspecialchars($_POST['login'], ENT_QUOTES);
                                                                                                                     } ?>" required />
-                                <label for="psw"><b>Password*</b></label>
-                                <input type="password" placeholder="Enter Password" name="passwordConnect" id="psw" required>
+                                <label for="psw"><b>Mot de passe*</b></label>
+                                <input type="password" placeholder="Entrer le mot de passe" name="passwordConnect" id="psw" required>
 
                                 <button name="submitConnect" type="submit">Connexion</button>
-                                <span class="psw">Already don't have an account ? <a href="inscription.php"> Sign in ?</a></span>
+                                <span class="psw">Vous n'êtes pas inscrit ? <a href="inscription.php"> Inscrivez vous.</a></span>
                             </div>
                         </form>
                     </div>

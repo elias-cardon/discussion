@@ -30,9 +30,9 @@ if (isset($_SESSION["loginConnect"])) {
         $message = '';
 
         if (mysqli_num_rows($res_l) == 1) {
-            $messageLogin = 'Votre login exist deja !';
+            $messageLogin = 'Votre login existe déjà !';
         } elseif ($pass != $pass1) {
-            $messagePass = 'Vos mot de passe ne correspondent pas !';
+            $messagePass = 'Vos mots de passe ne correspondent pas !';
         } elseif ($pass == $pass1 and mysqli_num_rows($res_l) == 0) {
             $insertMbr = "INSERT INTO utilisateurs (login, password) VALUES ('$login', '$pass')";
             $query = mysqli_query($link, $insertMbr);
@@ -59,15 +59,15 @@ if (isset($_SESSION["loginConnect"])) {
             <nav>
             <h1><a href="#">Masque</a></h1>
                 <ul>
-                    <li><a href="index.php">Home</a></li>
+                    <li><a href="index.php">Accueil</a></li>
                     <li><a href="connexion.php">Connexion</a></li>
-                    <li><a href="motdepass.html">Forget password ?</a></li>
+                    <!-- <li><a href="motdepass.html">Forget password ?</a></li> -->
                 </ul>
             </nav>
         </header>
         <main>
             <section>
-                <h2>Register</h2>
+                <h2>Inscription</h2>
                 <div class="container">
                     <form action="<?php echo htmlspecialchars($_SERVER['REQUEST_URI'], ENT_QUOTES); ?>" method="post" method="POST">
                         <div class="imgcontainer">
@@ -78,20 +78,20 @@ if (isset($_SESSION["loginConnect"])) {
                                 <p><?php echo $messageLogin; ?></p>
                             <?php endif; ?>
                             <label for="uname"><b>Login*</b></label>
-                            <input type="text" placeholder="Enter lgoin" name="login" value="<?php if (!empty($_POST['login'])) {
+                            <input type="text" placeholder="Entrer le login" name="login" value="<?php if (!empty($_POST['login'])) {
                                                                                                     echo htmlspecialchars($_POST['login'], ENT_QUOTES);
                                                                                                 } ?>" required>
 
-                            <label for="psw"><b>Password*</b></label>
+                            <label for="psw"><b>Mot de passe*</b></label>
                             <input type="password" placeholder="Enter Password" name="password" required>
 
                             <?php if (!empty($messagePass)) : ?>
                                 <p><?php echo $messagePass; ?></p>
                             <?php endif; ?>
-                            <label for="psw"><b>Comfirm Password*</b></label>
+                            <label for="psw"><b>Comfirmer le mot de passe*</b></label>
                             <input type="password" placeholder="Enter comfirm Password" name="password1" required>
 
-                            <button type="submit" name="submit">Submit</button>
+                            <button type="submit" name="submit">Valider</button>
                         </div>
                     </form>
                 </div>

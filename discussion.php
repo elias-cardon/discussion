@@ -26,7 +26,7 @@ if (isset($_SESSION['id'])) {
             $insertMsg = mysqli_query($link, $insertMsg);
             header("Location: discussion.php");
         } else {
-            $message = 'Votre message est trop long 140 max !';
+            $message = 'Votre message est trop long. 140 caractères maximum !';
         }
     }
     if (isset($_SESSION["loginConnect"])) {
@@ -49,7 +49,7 @@ if (isset($_SESSION['id'])) {
             <nav>
             <h1><a href="#">Masque</a></h1>
                 <ul>
-                    <li><a href="index.php">Home</a></li>
+                    <li><a href="index.php">Accueil</a></li>
                     <li><a href="discussion.php">Discussion</a></li>
                     <li><a href="profil.php">Profil</a></li>
                     <?php
@@ -70,7 +70,7 @@ if (isset($_SESSION['id'])) {
         <main>
             <section>
                 <div class="container">
-                    <h1>File de discussion</h1>
+                    <h1>Fil de discussion</h1>
                     <?php
                     foreach ($data as $com) {
                     ?>
@@ -115,6 +115,6 @@ if (isset($_SESSION['id'])) {
 
 <?php
 } else {
-    echo "Tu dois te connecté  " . " Retour <a href='connexion.php'>Connexion</a>";
+    echo "Tu dois te connecter." . " <a href='connexion.php'>Connexion</a>";
 }
 ?>

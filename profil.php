@@ -52,9 +52,9 @@ if (isset($_SESSION['id'])) {
             <nav>
             <h1><a href="#">Masque</a></h1>
                 <ul>
-                    <li><a href="index.php">Home</a></li>
+                    <li><a href="index.php">Accueil</a></li>
                     <li><a href="discussion.php">Discussion</a></li>
-                    <li><a href="profil.php">Profil</a></li>
+                    <!-- <li><a href="profil.php">Profil</a></li> -->
                     <?php
                     if (isset($_SESSION['id'])) {
                     ?>
