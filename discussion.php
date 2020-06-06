@@ -9,6 +9,7 @@ if (isset($_SESSION['login'])) {
                         ORDER BY messages.id";
     $query = mysqli_query($link, $requete);
     $data = mysqli_fetch_all($query);
+   
 
     if (isset($_POST['submitLogout'])) {
         session_destroy();
@@ -17,11 +18,15 @@ if (isset($_SESSION['login'])) {
     }
 
     if (isset($_POST['submitDiscussion'])) {
+        $requeteid = "SELECT * FROM utilisateurs";
+        $queryid = mysqli_query($link, $requeteid);
+        $dataid = mysqli_fetch_all($queryid);
         $msg = $_POST['msg'];
-        $id = $data[0][2];
+        $id = $dataid[0][0];
         $msglength = strlen($msg);
         echo"test";
         if (!empty($_POST['msg']) and ($msglength <= 140)) {
+
             $date = date('Y-m-d');
             $insertMsg = "INSERT INTO messages (message, id_utilisateur, date) VALUES ('$msg', '$id','$date')";
             $insertMsg = mysqli_query($link, $insertMsg);
