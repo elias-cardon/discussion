@@ -71,21 +71,22 @@ if (isset($_SESSION['id'])) {
             </nav>
         </header>
         <main>
-            <section>
+           <section>
                 <div class="container">
-                    <h2>Bienvenue <?php
+                    <h2>Bievennue <?php
                                     echo $userinfo[0][1]
-                                    ?> !</h2>
+                                    ?></h2>
 
                     <form action="<?php echo htmlspecialchars($_SERVER['REQUEST_URI'], ENT_QUOTES); ?>" method="post" method="POST">
 
                         <label>Login : <?php echo $userinfo[0][1]; ?></label>
-                        <input type="text" placeholder="Entrez votre nouveau login" name="editlogin">
+                        <input type="text" placeholder="Enter your lgoin" name="editlogin" value="<?php echo $userinfo[0][1]; ?>">
 
                         <label>Password : <?php echo $userinfo[0][2]; ?></label>
-                        <input type="password" placeholder="Entrez votre nouveau mot de passe" name="editpassword1">
+                        <input type="password" placeholder="Enter Password" name="editpassword1">
 
-                        <input type="password" placeholder="Répétez votre nouveau mot de passe" name="editpassword2">
+                        <label>Password : <?php echo $userinfo[0][2]; ?></label>
+                        <input type="password" placeholder="Enter confirm Password" name="editpassword2">
                         <?php if (!empty($messagePass)) {  ?>
                             <p><?php echo $messagePass; ?></p>
                         <?php } ?>
